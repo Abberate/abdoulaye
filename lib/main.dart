@@ -1,8 +1,9 @@
-import 'package:abdoulaye/mobile/landing_page_mobile.dart';
-import 'package:abdoulaye/web/landing_page_web.dart';
+import 'package:abdoulaye/routes.dart' show Routes;
 import 'package:flutter/material.dart';
+import 'package:url_strategy/url_strategy.dart' show setPathUrlStrategy;
 
 void main() {
+  setPathUrlStrategy();
   runApp(const MyApp());
 }
 
@@ -12,15 +13,9 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: LayoutBuilder(
-        builder: (context, constraints) {
-          if (constraints.maxWidth > 800) {
-            return LandingPageWeb();
-          } else {
-            return LandingPageMobile();
-          }
-        },
-      ),
+      debugShowCheckedModeBanner: false,
+      onGenerateRoute: (settings) => Routes.generateRoute(settings),
+      initialRoute: '/',
     );
   }
 }
