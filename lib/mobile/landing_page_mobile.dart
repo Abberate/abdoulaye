@@ -58,7 +58,10 @@ class _LandingPageMobileState extends State<LandingPageMobile> {
                   shape: BoxShape.circle,
                   border: Border.all(width: 3.0),
                 ),
-                child: Image.asset("assets/image-circle.png"),
+                child: Image.asset(
+                  "assets/image-circle.png",
+                  filterQuality: FilterQuality.high,
+                ),
               ),
             ),
             TabsMobile(text: 'Home', route: '/'),
@@ -118,21 +121,20 @@ class _LandingPageMobileState extends State<LandingPageMobile> {
       body: ListView(
         children: [
           //Intro Fisrt Section
+          CircleAvatar(
+            radius: 117.0,
+            backgroundColor: Colors.purpleAccent,
+            child: CircleAvatar(
+              radius: 110.0,
+              backgroundColor: Colors.white,
+              backgroundImage: AssetImage('assets/image-circle.png'),
+            ),
+          ),
           Padding(
-            padding: EdgeInsets.only(left: 20.0),
+            padding: EdgeInsets.symmetric(horizontal: 20.0),
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                CircleAvatar(
-                  radius: 117.0,
-                  backgroundColor: Colors.purpleAccent,
-                  child: CircleAvatar(
-                    radius: 110.0,
-                    backgroundColor: Colors.white,
-                    backgroundImage: AssetImage('assets/image-circle.png'),
-                  ),
-                ),
                 SizedBox(height: 25.0),
                 Column(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -191,10 +193,10 @@ class _LandingPageMobileState extends State<LandingPageMobile> {
           SizedBox(height: 90.0),
           //About me second section
           Padding(
-            padding: EdgeInsets.only(left: 20.0),
+            padding: EdgeInsets.symmetric(horizontal: 20.0),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 SansBold(text: "About Me", size: 30.0),
                 SizedBox(height: 15.0),
