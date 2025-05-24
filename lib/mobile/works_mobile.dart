@@ -3,14 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-class ContactMobile extends StatefulWidget {
-  const ContactMobile({super.key});
+class WorksMobile extends StatefulWidget {
+  const WorksMobile({super.key});
 
   @override
-  State<ContactMobile> createState() => _ContactMobileState();
+  State<WorksMobile> createState() => _WorksMobileState();
 }
 
-class _ContactMobileState extends State<ContactMobile> {
+class _WorksMobileState extends State<WorksMobile> {
   urlLauncher(String imgPath, String url) {
     return IconButton(
       icon: SvgPicture.asset(imgPath, width: 35.0, color: Colors.black),
@@ -22,7 +22,6 @@ class _ContactMobileState extends State<ContactMobile> {
 
   @override
   Widget build(BuildContext context) {
-    var widthDevice = MediaQuery.of(context).size.width;
     return SafeArea(
       child: Scaffold(
         extendBodyBehindAppBar: true,
@@ -105,61 +104,41 @@ class _ContactMobileState extends State<ContactMobile> {
                 iconTheme: IconThemeData(size: 35.0, color: Colors.black),
                 flexibleSpace: FlexibleSpaceBar(
                   background: Image.asset(
-                    "assets/contact_image.jpg",
+                    "assets/works.jpg",
                     fit: BoxFit.cover,
                   ),
                 ),
               ),
             ];
           },
-          body: SingleChildScrollView(
-            padding: EdgeInsets.symmetric(vertical: 25.0),
-            child: Wrap(
-              spacing: 20.0,
-              runSpacing: 20.0,
-              alignment: WrapAlignment.center,
-              children: [
-                SansBold(text: "Contact me", size: 35.0),
-                TextForm(
-                  text: "First Name",
-                  containerWidth: widthDevice / 1.4,
-                  hintText: "Please type your first Name",
-                ),
-                TextForm(
-                  text: "Last Name",
-                  containerWidth: widthDevice / 1.4,
-                  hintText: "PLease type your last name",
-                ),
-                TextForm(
-                  text: "Email",
-                  containerWidth: widthDevice / 1.4,
-                  hintText: "Please type your email",
-                ),
-                TextForm(
-                  text: "Phone number",
-                  containerWidth: widthDevice / 1.4,
-                  hintText: "Please typeyour Phone number",
-                ),
-                TextForm(
-                  text: "Message",
-                  containerWidth: widthDevice / 1.4,
-                  hintText: "Your message  ",
-                  maxLines: 10,
-                ),
-
-                MaterialButton(
-                  elevation: 20.0,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10.0),
+          body: ListView(
+            children: [
+              Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  SizedBox(height: 30.0),
+                  SansBold(text: "Works", size: 40.0),
+                  SizedBox(height: 20.0),
+                  AnimatedCard(
+                    imagePath: 'portfolio.png',
+                    height: 150.0,
+                    width: 300.0,
+                    fit: BoxFit.contain,
                   ),
-                  height: 60.0,
-                  minWidth: widthDevice / 2.2,
-                  color: Colors.purpleAccent,
-                  onPressed: () {},
-                  child: SansBold(text: "Submit", size: 20.0),
-                ),
-              ],
-            ),
+                  SizedBox(height: 20.0),
+                  SansBold(text: "Portfolio", size: 30.0),
+                  SizedBox(height: 10.0),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                    child: Sans(
+                      text:
+                          "Deployed on Ios Android and Web, the portfolio app was an truly achiement for me . I use flutter to develop this beautiful and responsive app and fire base for the back-end",
+                      size: 15.0,
+                    ),
+                  ),
+                ],
+              ),
+            ],
           ),
         ),
       ),

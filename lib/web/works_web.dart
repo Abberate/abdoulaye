@@ -1,17 +1,16 @@
+import 'package:abdoulaye/components.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-import '../components.dart';
-
-class ContactWeb extends StatefulWidget {
-  const ContactWeb({super.key});
+class WorksWeb extends StatefulWidget {
+  const WorksWeb({super.key});
 
   @override
-  State<ContactWeb> createState() => _ContactWebState();
+  State<WorksWeb> createState() => _WorksWebState();
 }
 
-class _ContactWebState extends State<ContactWeb> {
+class _WorksWebState extends State<WorksWeb> {
   urlLauncher(String imgPath, String url) {
     return IconButton(
       icon: SvgPicture.asset(imgPath, width: 35.0, color: Colors.black),
@@ -61,7 +60,7 @@ class _ContactWebState extends State<ContactWeb> {
               expandedHeight: 400.0,
               flexibleSpace: FlexibleSpaceBar(
                 background: Image.asset(
-                  'contact_image.jpg',
+                  'works.jpg',
                   fit: BoxFit.cover,
                   filterQuality: FilterQuality.high,
                 ),
@@ -86,68 +85,40 @@ class _ContactWebState extends State<ContactWeb> {
             ),
           ];
         },
-        body: SingleChildScrollView(
-          child: Column(
-            children: [
-              SizedBox(height: 30.0),
-              SansBold(text: "Contact Me", size: 40.0),
-              SizedBox(height: 20.0),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  Column(
-                    spacing: 15,
-                    children: [
-                      TextForm(
-                        text: "First Name",
-                        containerWidth: 350.0,
-                        hintText: "Please type your first Name",
+        body: ListView(
+          children: [
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                SizedBox(height: 30.0),
+                SansBold(text: "Works", size: 40.0),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    AnimatedCard(
+                      imagePath: 'portfolio.png',
+                      height: 200.0,
+                      width: 350.0,
+                    ),
+                    SizedBox(
+                      width: widthDevice / 3,
+                      child: Column(
+                        children: [
+                          SansBold(text: "Portfolio", size: 30.0),
+                          SizedBox(height: 15.0),
+                          Sans(
+                            text:
+                                "Deployed on Ios Android and Web, the portfolio app was an truly achiement for me . I use flutter to develop this beautiful and responsive app and fire base for the back-end",
+                            size: 15.0,
+                          ),
+                        ],
                       ),
-                      TextForm(
-                        text: "Email",
-                        containerWidth: 350.0,
-                        hintText: "Please type your email",
-                      ),
-                    ],
-                  ),
-                  Column(
-                    spacing: 15,
-                    children: [
-                      TextForm(
-                        text: "Last Name",
-                        containerWidth: 350.0,
-                        hintText: "PLease type your last name",
-                      ),
-                      TextForm(
-                        text: "Phone number",
-                        containerWidth: 350.0,
-                        hintText: "Please typeyour Phone number",
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-              TextForm(
-                text: "Message",
-                containerWidth: widthDevice / 1.5,
-                hintText: "Your message  ",
-                maxLines: 10,
-              ),
-              SizedBox(height: 20.0),
-              MaterialButton(
-                elevation: 20.0,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10.0),
+                    ),
+                  ],
                 ),
-                height: 60.0,
-                minWidth: 200.0,
-                color: Colors.purpleAccent,
-                onPressed: () {},
-                child: SansBold(text: "Submit", size: 20.0),
-              ),
-              SizedBox(height: 20.0),
-            ],
-          ),
+              ],
+            ),
+          ],
         ),
       ),
     );
