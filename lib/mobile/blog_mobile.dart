@@ -13,8 +13,6 @@ class BlogMobile extends StatefulWidget {
 }
 
 class _BlogMobileState extends State<BlogMobile> {
-  // List title = ["Who is dash", "Who is dash 2"];
-  // List body = ["Get data from google is the top", "google it"];
   urlLauncher(String imgPath, String url) {
     return IconButton(
       icon: SvgPicture.asset(imgPath, width: 35.0, color: Colors.black),
@@ -24,25 +22,27 @@ class _BlogMobileState extends State<BlogMobile> {
     );
   }
 
-  void article() async {
-    await FirebaseFirestore.instance.collection('articles').get().then((
-      querySnapshot,
-    ) {
-      querySnapshot.docs.forEach((element) {
-        print(element.data()['title']);
-      });
-    });
-  }
-
-  void streamArticles() async {
-    await for (var snapshot
-        in FirebaseFirestore.instance.collection('articles').snapshots()) {
-      for (var article in snapshot.docs) {
-        print(article.data()['title']);
-      }
-    }
-  }
-
+  // void article() async {
+  //   await FirebaseFirestore.instance.collection('articles').get().then((
+  //     querySnapshot,
+  //   ) {
+  //     querySnapshot.docs.forEach((element) {
+  //       print(element.data()['title']);
+  //     });
+  //   });
+  // }
+  //
+  // void streamArticles() async {
+  //   var logger = Logger();
+  //
+  //   await for (var snapshot
+  //       in FirebaseFirestore.instance.collection('articles').snapshots()) {
+  //     for (var article in snapshot.docs) {
+  //       logger.d(article.data()['title']);
+  //     }
+  //   }
+  // }
+  //
   // @override
   // void initState() {
   //   //article();

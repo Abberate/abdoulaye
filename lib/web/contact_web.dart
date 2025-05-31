@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:logger/logger.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../components.dart';
@@ -20,6 +21,15 @@ class _ContactWebState extends State<ContactWeb> {
       },
     );
   }
+
+  var logger = Logger();
+
+  final TextEditingController _firstNameController = TextEditingController();
+  final TextEditingController _lastNameController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _phoneController = TextEditingController();
+  final TextEditingController _messageController = TextEditingController();
+  final _formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
@@ -87,66 +97,116 @@ class _ContactWebState extends State<ContactWeb> {
           ];
         },
         body: SingleChildScrollView(
-          child: Column(
-            children: [
-              SizedBox(height: 30.0),
-              SansBold(text: "Contact Me", size: 40.0),
-              SizedBox(height: 20.0),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  Column(
-                    spacing: 15,
-                    children: [
-                      TextForm(
-                        text: "First Name",
-                        containerWidth: 350.0,
-                        hintText: "Please type your first Name",
-                      ),
-                      TextForm(
-                        text: "Email",
-                        containerWidth: 350.0,
-                        hintText: "Please type your email",
-                      ),
-                    ],
-                  ),
-                  Column(
-                    spacing: 15,
-                    children: [
-                      TextForm(
-                        text: "Last Name",
-                        containerWidth: 350.0,
-                        hintText: "PLease type your last name",
-                      ),
-                      TextForm(
-                        text: "Phone number",
-                        containerWidth: 350.0,
-                        hintText: "Please typeyour Phone number",
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-              TextForm(
-                text: "Message",
-                containerWidth: widthDevice / 1.5,
-                hintText: "Your message  ",
-                maxLines: 10,
-              ),
-              SizedBox(height: 20.0),
-              MaterialButton(
-                elevation: 20.0,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10.0),
+          child: Form(
+            key: _formKey,
+            child: Column(
+              children: [
+                SizedBox(height: 30.0),
+                SansBold(text: "Contact Me", size: 40.0),
+                SizedBox(height: 20.0),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Column(
+                      spacing: 15,
+                      children: [
+                        TextForm(
+                          text: "First Name",
+                          containerWidth: 350.0,
+                          hintText: "Please type your first Name",
+                          controller: _firstNameController,
+                          validator: (value) {
+                            if (value!.isEmpty) {
+                              return 'Please enter your first name';
+                            }
+                            return null;
+                          },
+                        ),
+                        TextForm(
+                          text: "Email",
+                          containerWidth: 350.0,
+                          hintText: "Please type your email",
+                          controller: _emailController,
+                          validator: (value) {
+                            if (value!.isEmpty) {
+                              return 'Please enter your email';
+                            }
+                          },
+                        ),
+                      ],
+                    ),
+                    Column(
+                      spacing: 15,
+                      children: [
+                        TextForm(
+                          text: "Last Name",
+                          containerWidth: 350.0,
+                          hintText: "PLease type your last name",
+                          controller: _lastNameController,
+                          validator: (value) {
+                            if (value!.isEmpty) {
+                              return 'Please enter your last name';
+                            }
+                          },
+                        ),
+                        TextForm(
+                          text: "Phone number",
+                          containerWidth: 350.0,
+                          hintText: "Please typeyour Phone number",
+                          controller: _phoneController,
+                          validator: (value) {
+                            if (value!.isEmpty) {
+                              return 'Please enter your phone number';
+                            }
+                          },
+                        ),
+                      ],
+                    ),
+                  ],
                 ),
-                height: 60.0,
-                minWidth: 200.0,
-                color: Colors.purpleAccent,
-                onPressed: () {},
-                child: SansBold(text: "Submit", size: 20.0),
-              ),
-              SizedBox(height: 20.0),
-            ],
+                TextForm(
+                  text: "Message",
+                  containerWidth: widthDevice / 1.5,
+                  hintText: "Your message  ",
+                  maxLines: 10,
+                  controller: _messageController,
+                  validator: (value) {
+                    if (value!.isEmpty) {
+                      return 'Please enter your message';
+                    }
+                  },
+                ),
+                SizedBox(height: 20.0),
+                MaterialButton(
+                  elevation: 20.0,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10.0),
+                  ),
+                  height: 60.0,
+                  minWidth: 200.0,
+                  color: Colors.purpleAccent,
+                  onPressed: () async {
+                    if (_formKey.currentState!.validate()) {
+                      final addData = addDataFirestore();
+                      await addData.addMessage(
+                        _firstNameController.text,
+                        _lastNameController.text,
+                        _phoneController.text,
+                        _emailController.text,
+                        _messageController.text,
+                      );
+
+                      _formKey.currentState!.reset();
+                      if (context.mounted) {
+                        dialogErreur(context);
+                      }
+                    }
+                  },
+                  child: SansBold(text: "Submit", size: 20.0),
+                ),
+                SizedBox(height: 20.0),
+              ],
+            ),
           ),
         ),
       ),
