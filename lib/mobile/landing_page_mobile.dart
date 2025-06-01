@@ -349,7 +349,7 @@ class _LandingPageMobileState extends State<LandingPageMobile> {
                         onPressed: () async {
                           if (_formKey.currentState!.validate()) {
                             final addData = addDataFirestore();
-                            await addData.addMessage(
+                            var result = await addData.addMessage(
                               _firstNameController.text,
                               _lastNameController.text,
                               _phoneController.text,
@@ -357,9 +357,15 @@ class _LandingPageMobileState extends State<LandingPageMobile> {
                               _messageController.text,
                             );
 
-                            _formKey.currentState!.reset();
-                            if (context.mounted) {
-                              dialogErreur(context);
+                            if (result) {
+                              _formKey.currentState!.reset();
+                              if (context.mounted) {
+                                dialogErreur(context, "Message envoyé");
+                              }
+                            } else {
+                              if (context.mounted) {
+                                dialogErreur(context, "Erreur d'envoi");
+                              }
                             }
                           }
                         },

@@ -277,7 +277,7 @@ class addDataFirestore {
   var logger = Logger();
   CollectionReference messagesCollection = FirebaseFirestore.instance
       .collection('messages');
-  Future<void> addMessage(
+  Future addMessage(
     final firstname,
     final lastname,
     final phoneNumber,
@@ -292,12 +292,18 @@ class addDataFirestore {
           'phoneNumber': phoneNumber,
           'message': message,
         })
-        .then((value) => logger.i("Message Added"))
-        .catchError((error) => logger.e("Failed to add message: $error"));
+        .then((value) {
+          logger.d("Success");
+          return true;
+        })
+        .catchError((error) {
+          logger.e("Failed to add message: $error");
+          return false;
+        });
   }
 }
 
-Future dialogErreur(BuildContext context) {
+Future dialogErreur(context, String title) {
   return showDialog(
     context: context,
     builder:
@@ -305,7 +311,7 @@ Future dialogErreur(BuildContext context) {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(10.0),
           ),
-          title: SansBold(text: " Send Success", size: 20.0),
+          title: SansBold(text: title, size: 20.0),
         ),
   );
 }
