@@ -1,7 +1,5 @@
 import 'package:abdoulaye/components.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
-import 'package:url_launcher/url_launcher.dart' show launchUrl;
 
 class AboutMobile extends StatefulWidget {
   const AboutMobile({super.key});
@@ -11,30 +9,6 @@ class AboutMobile extends StatefulWidget {
 }
 
 class _AboutMobileState extends State<AboutMobile> {
-  purpleContainer({required String text}) {
-    return Container(
-      padding: EdgeInsets.all(7.0),
-      decoration: BoxDecoration(
-        border: Border.all(
-          color: Colors.purpleAccent,
-          width: 2.0,
-          style: BorderStyle.solid,
-        ),
-        borderRadius: BorderRadius.all(Radius.circular(10.0)),
-      ),
-      child: Sans(text: text, size: 15.0),
-    );
-  }
-
-  urlLauncher(String imgPath, String url) {
-    return IconButton(
-      icon: SvgPicture.asset(imgPath, width: 35.0, color: Colors.black),
-      onPressed: () async {
-        await launchUrl(Uri.parse(url));
-      },
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -46,78 +20,7 @@ class _AboutMobileState extends State<AboutMobile> {
           elevation: 0.0,
           iconTheme: IconThemeData(size: 35.0, color: Colors.black),
         ),
-        endDrawer: Drawer(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              DrawerHeader(
-                padding: EdgeInsets.only(bottom: 20.0),
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: Colors.black,
-                    shape: BoxShape.circle,
-                    border: Border.all(width: 3.0),
-                  ),
-                  child: Image.asset(
-                    "assets/image-circle.png",
-                    filterQuality: FilterQuality.high,
-                  ),
-                ),
-              ),
-              TabsMobile(text: 'Home', route: '/'),
-              SizedBox(height: 20.0),
-              TabsMobile(text: 'Works', route: '/works'),
-              SizedBox(height: 20.0),
-              TabsMobile(text: 'Blog', route: '/blog'),
-              SizedBox(height: 20.0),
-              TabsMobile(text: 'About', route: '/about'),
-              SizedBox(height: 20.0),
-              TabsMobile(text: 'Contact', route: '/contact'),
-              SizedBox(height: 40.0),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  IconButton(
-                    onPressed:
-                        () async => await urlLauncher(
-                          "instagram.svg",
-                          "https://www.instagram.com",
-                        ),
-                    icon: SvgPicture.asset(
-                      "assets/instagram.svg",
-                      color: Colors.black,
-                      width: 35.0,
-                    ),
-                  ),
-                  IconButton(
-                    onPressed:
-                        () async => await urlLauncher(
-                          "instagram.svg",
-                          "https://www.x.com",
-                        ),
-                    icon: SvgPicture.asset(
-                      "assets/twitter.svg",
-                      color: Colors.black,
-                      width: 35.0,
-                    ),
-                  ),
-                  IconButton(
-                    onPressed:
-                        () async => await urlLauncher(
-                          "instagram.svg",
-                          "https://www.github.com",
-                        ),
-                    icon: SvgPicture.asset(
-                      "assets/github.svg",
-                      color: Colors.black,
-                      width: 35.0,
-                    ),
-                  ),
-                ],
-              ),
-            ],
-          ),
-        ),
+        endDrawer: DrawersMobile(),
         body: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20.0),
           child: ListView(

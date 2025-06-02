@@ -1,15 +1,13 @@
+import 'package:abdoulaye/common/blog.dart';
 import 'package:abdoulaye/mobile/about_mobile.dart';
 import 'package:abdoulaye/mobile/contact_mobile.dart';
 import 'package:abdoulaye/mobile/landing_page_mobile.dart';
 import 'package:abdoulaye/mobile/works_mobile.dart';
 import 'package:abdoulaye/web/about_web.dart';
-import 'package:abdoulaye/web/blog_web.dart';
 import 'package:abdoulaye/web/contact_web.dart';
 import 'package:abdoulaye/web/landing_page_web.dart';
 import 'package:abdoulaye/web/works_web.dart';
 import 'package:flutter/material.dart';
-
-import 'mobile/blog_mobile.dart';
 
 class Routes {
   static Route<dynamic> generateRoute(RouteSettings settings) {
@@ -57,19 +55,7 @@ class Routes {
               ),
         );
       case '/blog':
-        return MaterialPageRoute(
-          settings: settings,
-          builder:
-              (_) => LayoutBuilder(
-                builder: (context, constraints) {
-                  if (constraints.maxWidth > 800) {
-                    return BlogWeb();
-                  } else {
-                    return BlogMobile();
-                  }
-                },
-              ),
-        );
+        return MaterialPageRoute(settings: settings, builder: (_) => Blog());
       case '/works':
         return MaterialPageRoute(
           settings: settings,

@@ -1,7 +1,5 @@
 import 'package:abdoulaye/components.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 class AboutWeb extends StatefulWidget {
   const AboutWeb({super.key});
@@ -11,83 +9,18 @@ class AboutWeb extends StatefulWidget {
 }
 
 class _AboutWebState extends State<AboutWeb> {
-  urlLauncher(String imgPath, String url) {
-    return IconButton(
-      icon: SvgPicture.asset(imgPath, width: 35.0, color: Colors.black),
-      onPressed: () async {
-        await launchUrl(Uri.parse(url));
-      },
-    );
-  }
-
-  purpleContainer({required String text}) {
-    return Container(
-      padding: EdgeInsets.all(7.0),
-      decoration: BoxDecoration(
-        border: Border.all(
-          color: Colors.purpleAccent,
-          width: 2.0,
-          style: BorderStyle.solid,
-        ),
-        borderRadius: BorderRadius.all(Radius.circular(10.0)),
-      ),
-      child: Sans(text: text, size: 15.0),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     var heightDevice = MediaQuery.of(context).size.height;
     var widthDevice = MediaQuery.of(context).size.width;
     return Scaffold(
       backgroundColor: Colors.white,
-      drawer: Drawer(
-        backgroundColor: Colors.white,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            CircleAvatar(
-              backgroundColor: Colors.purpleAccent,
-              radius: 73.0,
-              child: CircleAvatar(
-                radius: 70.0,
-                backgroundColor: Colors.white,
-                backgroundImage: AssetImage('image.jpg'),
-              ),
-            ),
-            SizedBox(height: 15.0),
-            SansBold(text: "Abdoulaye B", size: 30.0),
-            SizedBox(height: 15.0),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                urlLauncher("instagram.svg", "https://www.instagram.com"),
-                urlLauncher("twitter.svg", "https://www.twitter.com"),
-                urlLauncher("github.svg", "https://www.github.com"),
-              ],
-            ),
-          ],
-        ),
-      ),
+      drawer: DrawersWeb(),
       appBar: AppBar(
         iconTheme: IconThemeData(size: 25.0, color: Colors.black),
         backgroundColor: Colors.white,
         elevation: 0.0,
-        title: Row(
-          children: [
-            Spacer(flex: 3),
-            TabsWeb(title: "Accueil", route: '/'),
-            Spacer(),
-            TabsWeb(title: "Travaux", route: '/works'),
-            Spacer(),
-            TabsWeb(title: "Blog", route: '/blog'),
-            Spacer(),
-            TabsWeb(title: "À propos", route: '/about'),
-            Spacer(),
-            TabsWeb(title: "Contact", route: '/contact'),
-            Spacer(),
-          ],
-        ),
+        title: TabsWebList(),
       ),
       body: ListView(
         children: [

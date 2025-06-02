@@ -1,8 +1,58 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:logger/logger.dart';
+import 'package:url_launcher/url_launcher.dart';
 
+urlLauncher(String imgPath, String url) {
+  return IconButton(
+    icon: SvgPicture.asset(imgPath, width: 35.0, color: Colors.black),
+    onPressed: () async {
+      await launchUrl(Uri.parse(url));
+    },
+  );
+}
+
+Future dialogErreur(context, String title) {
+  return showDialog(
+    context: context,
+    builder:
+        (BuildContext context) => AlertDialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10.0),
+          ),
+          title: SansBold(text: title, size: 20.0),
+        ),
+  );
+}
+
+purpleContainer({required String text}) {
+  return Container(
+    padding: EdgeInsets.all(7.0),
+    decoration: BoxDecoration(
+      border: Border.all(
+        color: Colors.purpleAccent,
+        width: 2.0,
+        style: BorderStyle.solid,
+      ),
+      borderRadius: BorderRadius.all(Radius.circular(10.0)),
+    ),
+    child: Sans(text: text, size: 15.0),
+  );
+}
+
+//variable
+
+var logger = Logger();
+
+final TextEditingController _firstNameController = TextEditingController();
+final TextEditingController _lastNameController = TextEditingController();
+final TextEditingController _emailController = TextEditingController();
+final TextEditingController _phoneController = TextEditingController();
+final TextEditingController _messageController = TextEditingController();
+
+//classes
 class TabsWeb extends StatefulWidget {
   const TabsWeb({required this.title, required this.route, super.key});
   final String title;
@@ -82,6 +132,117 @@ class _TabsMobileState extends State<TabsMobile> {
       onPressed: () {
         Navigator.of(context).pushNamed(widget.route);
       },
+    );
+  }
+}
+
+class TabsWebList extends StatefulWidget {
+  const TabsWebList({super.key});
+
+  @override
+  State<TabsWebList> createState() => _TabsWebListState();
+}
+
+class _TabsWebListState extends State<TabsWebList> {
+  @override
+  Widget build(BuildContext context) {
+    return const Row(
+      children: [
+        Spacer(flex: 3),
+        TabsWeb(title: 'Home', route: '/'),
+        Spacer(),
+        TabsWeb(title: 'Works', route: '/works'),
+        Spacer(),
+        TabsWeb(title: 'Blog', route: '/blog'),
+        Spacer(),
+        TabsWeb(title: 'About', route: '/about'),
+        Spacer(),
+        TabsWeb(title: 'Contact', route: '/contact'),
+        Spacer(),
+      ],
+    );
+  }
+}
+
+class DrawersWeb extends StatelessWidget {
+  const DrawersWeb({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Drawer(
+      backgroundColor: Colors.white,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          CircleAvatar(
+            backgroundColor: Colors.purpleAccent,
+            radius: 73.0,
+            child: CircleAvatar(
+              radius: 70.0,
+              backgroundColor: Colors.white,
+              backgroundImage: AssetImage('image.jpg'),
+            ),
+          ),
+          SizedBox(height: 15.0),
+          SansBold(text: "Abdoulaye B", size: 30.0),
+          SizedBox(height: 15.0),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              urlLauncher("instagram.svg", "https://www.instagram.com"),
+              urlLauncher("twitter.svg", "https://www.twitter.com"),
+              urlLauncher("github.svg", "https://www.github.com"),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class DrawersMobile extends StatelessWidget {
+  const DrawersMobile({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Drawer(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          DrawerHeader(
+            padding: EdgeInsets.only(bottom: 20.0),
+            child: Container(
+              decoration: BoxDecoration(
+                color: Colors.black,
+                shape: BoxShape.circle,
+                border: Border.all(width: 3.0),
+              ),
+              child: Image.asset(
+                "assets/image-circle.png",
+                filterQuality: FilterQuality.high,
+              ),
+            ),
+          ),
+          TabsMobile(text: 'Home', route: '/'),
+          SizedBox(height: 20.0),
+          TabsMobile(text: 'Works', route: '/works'),
+          SizedBox(height: 20.0),
+          TabsMobile(text: 'Blog', route: '/blog'),
+          SizedBox(height: 20.0),
+          TabsMobile(text: 'About', route: '/about'),
+          SizedBox(height: 20.0),
+          TabsMobile(text: 'Contact', route: '/contact'),
+          SizedBox(height: 40.0),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              urlLauncher("instagram.svg", "https://www.instagram.com"),
+              urlLauncher("twitter.svg", "https://www.twitter.com"),
+              urlLauncher("github.svg", "https://www.github.com"),
+            ],
+          ),
+        ],
+      ),
     );
   }
 }
@@ -274,7 +435,6 @@ class _AnimatedCardState extends State<AnimatedCard>
 }
 
 class addDataFirestore {
-  var logger = Logger();
   CollectionReference messagesCollection = FirebaseFirestore.instance
       .collection('messages');
   Future addMessage(
@@ -303,15 +463,252 @@ class addDataFirestore {
   }
 }
 
-Future dialogErreur(context, String title) {
-  return showDialog(
-    context: context,
-    builder:
-        (BuildContext context) => AlertDialog(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10.0),
+class ContactFormWeb extends StatefulWidget {
+  const ContactFormWeb({super.key});
+
+  @override
+  State<ContactFormWeb> createState() => _ContactFormWebState();
+}
+
+class _ContactFormWebState extends State<ContactFormWeb> {
+  final _formKey = GlobalKey<FormState>();
+
+  @override
+  Widget build(BuildContext context) {
+    var widthDevice = MediaQuery.of(context).size.width;
+    return Form(
+      key: _formKey,
+      child: Column(
+        children: [
+          SizedBox(height: 30.0),
+          SansBold(text: "Contact Me", size: 40.0),
+          SizedBox(height: 20.0),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              Column(
+                spacing: 15,
+                children: [
+                  TextForm(
+                    text: "First Name",
+                    containerWidth: 350.0,
+                    hintText: "Please type your first Name",
+                    controller: _firstNameController,
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return 'Please enter your first name';
+                      }
+                      return null;
+                    },
+                  ),
+                  TextForm(
+                    text: "Email",
+                    containerWidth: 350.0,
+                    hintText: "Please type your email",
+                    controller: _emailController,
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return 'Please enter your email';
+                      }
+                    },
+                  ),
+                ],
+              ),
+              Column(
+                spacing: 15,
+                children: [
+                  TextForm(
+                    text: "Last Name",
+                    containerWidth: 350.0,
+                    hintText: "PLease type your last name",
+                    controller: _lastNameController,
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return 'Please enter your last name';
+                      }
+                    },
+                  ),
+                  TextForm(
+                    text: "Phone number",
+                    containerWidth: 350.0,
+                    hintText: "Please typeyour Phone number",
+                    controller: _phoneController,
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return 'Please enter your phone number';
+                      }
+                    },
+                  ),
+                ],
+              ),
+            ],
           ),
-          title: SansBold(text: title, size: 20.0),
-        ),
-  );
+          SizedBox(height: 20.0),
+          TextForm(
+            text: "Message",
+            containerWidth: widthDevice / 1.5,
+            hintText: "Your message  ",
+            maxLines: 10,
+            controller: _messageController,
+            validator: (value) {
+              if (value!.isEmpty) {
+                return 'Please enter your message';
+              }
+            },
+          ),
+          SizedBox(height: 20.0),
+          MaterialButton(
+            elevation: 20.0,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10.0),
+            ),
+            height: 60.0,
+            minWidth: 200.0,
+            color: Colors.purpleAccent,
+            onPressed: () async {
+              if (_formKey.currentState!.validate()) {
+                final addData = addDataFirestore();
+                var result = await addData.addMessage(
+                  _firstNameController.text,
+                  _lastNameController.text,
+                  _phoneController.text,
+                  _emailController.text,
+                  _messageController.text,
+                );
+
+                if (result) {
+                  _formKey.currentState!.reset();
+                  if (context.mounted) {
+                    dialogErreur(context, "Message envoyé");
+                  }
+                } else {
+                  if (context.mounted) {
+                    dialogErreur(context, "Erreur d'envoi");
+                  }
+                }
+              }
+            },
+            child: SansBold(text: "Submit", size: 20.0),
+          ),
+          SizedBox(height: 20.0),
+        ],
+      ),
+    );
+  }
+}
+
+class ContactFormMobile extends StatefulWidget {
+  const ContactFormMobile({super.key});
+
+  @override
+  State<ContactFormMobile> createState() => _ContactFormMobileState();
+}
+
+class _ContactFormMobileState extends State<ContactFormMobile> {
+  final _formKey = GlobalKey<FormState>();
+  @override
+  Widget build(BuildContext context) {
+    var widthDevice = MediaQuery.of(context).size.width;
+    return Form(
+      key: _formKey,
+      child: Wrap(
+        spacing: 20.0,
+        runSpacing: 20.0,
+        alignment: WrapAlignment.center,
+        children: [
+          SansBold(text: "Contact me", size: 35.0),
+          TextForm(
+            text: "First Name",
+            containerWidth: widthDevice / 1.4,
+            hintText: "Please type your first Name",
+            controller: _firstNameController,
+            validator: (value) {
+              if (value!.isEmpty) {
+                return "Please type your first name";
+              }
+            },
+          ),
+          TextForm(
+            text: "Last Name",
+            containerWidth: widthDevice / 1.4,
+            hintText: "PLease type your last name",
+            controller: _lastNameController,
+            validator: (value) {
+              if (value!.isEmpty) {
+                return "Please type your last name";
+              }
+            },
+          ),
+          TextForm(
+            text: "Email",
+            containerWidth: widthDevice / 1.4,
+            hintText: "Please type your email",
+            controller: _emailController,
+            validator: (value) {
+              if (value!.isEmpty) {
+                return "Please type your email";
+              }
+            },
+          ),
+          TextForm(
+            text: "Phone number",
+            containerWidth: widthDevice / 1.4,
+            hintText: "Please typeyour Phone number",
+            controller: _phoneController,
+            validator: (value) {
+              if (value!.isEmpty) {
+                return "Please type your phone number";
+              }
+            },
+          ),
+          TextForm(
+            text: "Message",
+            containerWidth: widthDevice / 1.4,
+            hintText: "Your message  ",
+            maxLines: 10,
+            controller: _messageController,
+            validator: (value) {
+              if (value!.isEmpty) {
+                return "Please type your message";
+              }
+            },
+          ),
+
+          MaterialButton(
+            elevation: 20.0,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10.0),
+            ),
+            height: 60.0,
+            minWidth: widthDevice / 2.2,
+            color: Colors.purpleAccent,
+            onPressed: () async {
+              if (_formKey.currentState!.validate()) {
+                final addData = addDataFirestore();
+                var result = await addData.addMessage(
+                  _firstNameController.text,
+                  _lastNameController.text,
+                  _phoneController.text,
+                  _emailController.text,
+                  _messageController.text,
+                );
+
+                if (result) {
+                  _formKey.currentState!.reset();
+                  if (context.mounted) {
+                    dialogErreur(context, "Message envoyé");
+                  }
+                } else {
+                  if (context.mounted) {
+                    dialogErreur(context, "Erreur d'envoi");
+                  }
+                }
+              }
+            },
+            child: SansBold(text: "Submit", size: 20.0),
+          ),
+        ],
+      ),
+    );
+  }
 }
